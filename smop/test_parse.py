@@ -2,12 +2,14 @@ import unittest
 import parse
 import node
 
+
 class TestParse(unittest.TestCase):
     def test_p03(self):
         """Expected failure"""
         s = """[1 ; 1; 1 ; ];"""
         t = parse.parse(s)
         self.assert_(t)
+
 
 # FIXME
 #   def test_p04(self):

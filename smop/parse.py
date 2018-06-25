@@ -3,9 +3,9 @@
 
 from ply import yacc
 from . import lexer
-from . lexer import tokens, raise_exception
+from .lexer import tokens, raise_exception
 from . import node
-from . node import exceptions
+from .node import exceptions
 from . import options
 
 # ident properties (set in parse.py)
@@ -37,7 +37,7 @@ precedence = (
     ("right", "TRANSPOSE"),
     ("right", "EXP", "DOTEXP", "POW"),
     ("nonassoc", "LPAREN", "RPAREN", "RBRACE", "LBRACE"),
-    ("left", "FIELD", "DOT", "PLUSPLUS", "MINUSMINUS"), )
+    ("left", "FIELD", "DOT", "PLUSPLUS", "MINUSMINUS"),)
 
 
 def p_top(p):
@@ -353,7 +353,7 @@ def p_expr2(p):
             if isinstance(p[1], node.matrix):
                 # TBD: mark idents as "P" - persistent
                 if p[3].__class__ not in (node.ident, node.funcall
-                                          ):  #, p[3].__class__
+                                          ):  # , p[3].__class__
                     raise_exception(SyntaxError,
                                     "multi-assignment",
                                     new_lexer)
@@ -371,9 +371,9 @@ def p_expr2(p):
             func_expr=node.ident("multiply"),
             args=node.expr_list([p[1], p[3]]))
 
-#    elif p[2] == "." and isinstance(p[3],node.expr) and p[3].op=="parens":
-#        p[0] = node.getfield(p[1],p[3].args[0])
-#        raise SyntaxError(p[3],p.lineno(3),p.lexpos(3))
+    #    elif p[2] == "." and isinstance(p[3],node.expr) and p[3].op=="parens":
+    #        p[0] = node.getfield(p[1],p[3].args[0])
+    #        raise SyntaxError(p[3],p.lineno(3),p.lexpos(3))
     elif p[2] == ":" and isinstance(p[1], node.expr) and p[1].op == ":":
         # Colon expression means different things depending on the
         # context.  As an array subscript, it is a slice; otherwise,
@@ -416,7 +416,6 @@ def p_expr_ident(p):
         defs=None,
         props=None,
         init=None)
-
 
 
 @exceptions
@@ -519,6 +518,7 @@ def p_for_stmt(p):
             raise_exception(SyntaxError, "Not implemented: for loop", new_lexer)
         p[2].props = "I"  # I= for-loop iteration variable
         p[0] = node.for_stmt(ident=p[2], expr=p[4], stmt_list=p[6])
+
 
 @exceptions
 def p_func_stmt(p):
@@ -836,6 +836,8 @@ def p_error(p):
     raise_exception(SyntaxError,
                     ('Unexpected "%s" (parser)' % p.value),
                     new_lexer)
+
+
 parser = yacc.yacc(start="top")
 
 
@@ -853,11 +855,11 @@ def parse(buf):
         for i, pi in enumerate(p):
             print(i, pi.__class__.__name__, pi._backend())
 
-#    for i in range(len(p)):
-#        if isinstance(p[i], node.func_stmt):
-#            break
-#    else:
-#        return None  # p[i] is a func decl
+    #    for i in range(len(p)):
+    #        if isinstance(p[i], node.func_stmt):
+    #            break
+    #    else:
+    #        return None  # p[i] is a func decl
 
     return p
 #    for j in range(i+1,len(p)):
@@ -870,4 +872,3 @@ def parse(buf):
 #    if "2" in options.debug:
 #        for i,pi in enumerate(p):
 #            print i,pi.__class__.__name__,str(pi)[:50]
-

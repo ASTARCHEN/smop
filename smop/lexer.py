@@ -7,7 +7,6 @@ import ply.lex as lex
 from ply.lex import TOKEN
 from . import options
 
-
 tokens = [
     "AND", "ANDAND", "ANDEQ", "BACKSLASH", "COLON", "COMMA", "DIV", "DIVEQ",
     "DOT", "DOTDIV", "DOTDIVEQ", "DOTEXP", "DOTMUL", "DOTMULEQ", "END_EXPR",
@@ -20,73 +19,74 @@ tokens = [
 ]
 
 reserved = {
-    "break"                  : "BREAK",
-    "case"                   : "CASE",
-    "catch"                  : "CATCH",
-    "continue"               : "CONTINUE",
-    "else"                   : "ELSE",
-    "elseif"                 : "ELSEIF",
-    "end_unwind_protect"     : "END_UNWIND_PROTECT",
-    "for"                    : "FOR",
-    "function"               : "FUNCTION",
-    "global"                 : "GLOBAL",
-    "if"                     : "IF",
-    "otherwise"              : "OTHERWISE",
-    "persistent"             : "PERSISTENT",
-    "return"                 : "RETURN",
-    "switch"                 : "SWITCH",
-    "try"                    : "TRY",
-    "unwind_protect"         : "UNWIND_PROTECT",
-    "unwind_protect_cleanup" : "UNWIND_PROTECT_CLEANUP",
-    "while"                  : "WHILE",
-    }
+    "break": "BREAK",
+    "case": "CASE",
+    "catch": "CATCH",
+    "continue": "CONTINUE",
+    "else": "ELSE",
+    "elseif": "ELSEIF",
+    "end_unwind_protect": "END_UNWIND_PROTECT",
+    "for": "FOR",
+    "function": "FUNCTION",
+    "global": "GLOBAL",
+    "if": "IF",
+    "otherwise": "OTHERWISE",
+    "persistent": "PERSISTENT",
+    "return": "RETURN",
+    "switch": "SWITCH",
+    "try": "TRY",
+    "unwind_protect": "UNWIND_PROTECT",
+    "unwind_protect_cleanup": "UNWIND_PROTECT_CLEANUP",
+    "while": "WHILE",
+}
 tokens += list(reserved.values())
 
+
 def new():
-    t_AND         = r"\&"
-    t_ANDAND      = r"\&\&"
-    t_ANDEQ       = r"\&="
-    t_BACKSLASH   = r"\\"
-    t_COLON       = r":"
-    t_DIV         = r"\/"
-    t_DIVEQ       = r"\/="
-    t_DOT         = r"\."
-    t_DOTDIV      = r"\./"
-    t_DOTDIVEQ    = r"\./="
-    t_DOTEXP      = r"\.\^"
-    t_DOTMUL      = r"\.\*"
-    t_DOTMULEQ    = r"\.\*="
-    t_EQ          = r"="
-    t_EQEQ        = r"=="
-    t_EXP         = r"\^"
-    t_EXPEQ       = r"\^="
-    t_GE          = r">="
-    t_GT          = r"\>"
-    t_HANDLE      = r"\@"
-    t_LE          = r"<="
-    t_LT          = r"\<"
-    t_MINUS       = r"\-"
-    t_MINUSEQ     = r"\-="
-    t_MINUSMINUS  = r"\--"
-    t_MUL         = r"\*"
-    t_POW         = r"\*\*"
-    t_MULEQ       = r"\*="
-    t_NE          = r"(~=)|(!=)"
-    t_NEG         = r"\~|\!"
-    t_OR          = r"\|"
-    t_OREQ        = r"\|="
-    t_OROR        = r"\|\|"
-    t_PLUS        = r"\+"
-    t_PLUSEQ      = r"\+="
-    t_PLUSPLUS    = r"\+\+"
-    
-    states = (("matrix","inclusive"),
-              ("afterkeyword","exclusive"))
+    t_AND = r"\&"
+    t_ANDAND = r"\&\&"
+    t_ANDEQ = r"\&="
+    t_BACKSLASH = r"\\"
+    t_COLON = r":"
+    t_DIV = r"\/"
+    t_DIVEQ = r"\/="
+    t_DOT = r"\."
+    t_DOTDIV = r"\./"
+    t_DOTDIVEQ = r"\./="
+    t_DOTEXP = r"\.\^"
+    t_DOTMUL = r"\.\*"
+    t_DOTMULEQ = r"\.\*="
+    t_EQ = r"="
+    t_EQEQ = r"=="
+    t_EXP = r"\^"
+    t_EXPEQ = r"\^="
+    t_GE = r">="
+    t_GT = r"\>"
+    t_HANDLE = r"\@"
+    t_LE = r"<="
+    t_LT = r"\<"
+    t_MINUS = r"\-"
+    t_MINUSEQ = r"\-="
+    t_MINUSMINUS = r"\--"
+    t_MUL = r"\*"
+    t_POW = r"\*\*"
+    t_MULEQ = r"\*="
+    t_NE = r"(~=)|(!=)"
+    t_NEG = r"\~|\!"
+    t_OR = r"\|"
+    t_OREQ = r"\|="
+    t_OROR = r"\|\|"
+    t_PLUS = r"\+"
+    t_PLUSEQ = r"\+="
+    t_PLUSPLUS = r"\+\+"
+
+    states = (("matrix", "inclusive"),
+              ("afterkeyword", "exclusive"))
 
     states = (("matrix", "inclusive"), ("afterkeyword", "exclusive"))
 
     ws = r"(\s|\.\.\..*\n|\\\n)"
-    #ws  = r"(\s|(\#|(%[^!])).*\n|\.\.\..*\n|\\\n)"
+    # ws  = r"(\s|(\#|(%[^!])).*\n|\.\.\..*\n|\\\n)"
     ws1 = ws + "+"
     ws0 = ws + "*"
     ms = r"'([^']|(''))*'"
@@ -111,7 +111,7 @@ def new():
 
     def t_afterkeyword_error(t):
         t_error(t)
-    
+
     # A quote, immediately following any of: (1) an alphanumeric
     # charater, (2) right bracket, parenthesis or brace,
     # or (3) another TRANSPOSE, is a TRANSPOSE.  Otherwise, it starts a
@@ -154,7 +154,7 @@ def new():
         if t.value in ("end", "endif", "endfunction", "endwhile", "endfor",
                        "endswitch", "end_try_catch"):
             keyword = t.lexer.stack.pop()  # if,while,etc.
-            #assert keyword == t.value or keyword == "try"
+            # assert keyword == t.value or keyword == "try"
             if keyword == "function":
                 t.type = "END_FUNCTION"
             else:
@@ -329,6 +329,7 @@ def new():
     lexer.stack = []
     return lexer
 
+
 def raise_exception(error_type, message, my_lexer):
     startpos = 1 + my_lexer.lexdata.rfind("\n", 0, my_lexer.lexpos)
     endpos = my_lexer.lexdata.find("\n", startpos)
@@ -336,6 +337,8 @@ def raise_exception(error_type, message, my_lexer):
                                my_lexer.lineno,
                                1 + my_lexer.lexpos - startpos,
                                my_lexer.lexdata[startpos:endpos]))
+
+
 def main():
     lexer = new()
     line = ""

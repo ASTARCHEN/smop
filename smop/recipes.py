@@ -42,7 +42,7 @@ def recordtype(typename, field_names, verbose=False, **default_kwds):
     if not field_names:
         raise ValueError('Records must have at least one field')
     for name in (typename,) + field_names:
-        if not min(c.isalnum() or c=='_' for c in name):
+        if not min(c.isalnum() or c == '_' for c in name):
             raise ValueError('Type names and field names can only contain '
                              'alphanumeric characters and underscores: %r' % name)
         if iskeyword(name):
@@ -63,7 +63,7 @@ def recordtype(typename, field_names, verbose=False, **default_kwds):
     field_defaults = default_kwds.pop('field_defaults', {})
     if 'default' in default_kwds:
         default = default_kwds.pop('default')
-        init_defaults = tuple(field_defaults.get(f,default) for f in field_names)
+        init_defaults = tuple(field_defaults.get(f, default) for f in field_names)
     elif not field_defaults:
         init_defaults = None
     else:
@@ -77,11 +77,11 @@ def recordtype(typename, field_names, verbose=False, **default_kwds):
     numfields = len(field_names)
     argtxt = ', '.join(field_names)
     reprtxt = ', '.join('%s=%%r' % f for f in field_names)
-    dicttxt = ', '.join('%r: self.%s' % (f,f) for f in field_names)
-    tupletxt = repr(tuple('self.%s' % f for f in field_names)).replace("'",'')
-    inittxt = '; '.join('self.%s=%s' % (f,f) for f in field_names)
+    dicttxt = ', '.join('%r: self.%s' % (f, f) for f in field_names)
+    tupletxt = repr(tuple('self.%s' % f for f in field_names)).replace("'", '')
+    inittxt = '; '.join('self.%s=%s' % (f, f) for f in field_names)
     itertxt = '; '.join('yield self.%s' % f for f in field_names)
-    eqtxt   = ' and '.join('self.%s==other.%s' % (f,f) for f in field_names)
+    eqtxt = ' and '.join('self.%s==other.%s' % (f, f) for f in field_names)
     template = dedent('''
         class %(typename)s(object):
             '%(typename)s(%(argtxt)s)'
@@ -135,8 +135,8 @@ def recordtype(typename, field_names, verbose=False, **default_kwds):
     elif sys.version_info.major == 2:
         cls.__init__.im_func.func_defaults = init_defaults
     else:
-        #import pdb
-        #pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         assert 0
     # For pickling to work, the __module__ variable needs to be set to the frame
     # where the named tuple is created.  Bypass this step in enviroments where
@@ -148,5 +148,6 @@ def recordtype(typename, field_names, verbose=False, **default_kwds):
 
 if __name__ == '__main__':
     import doctest
+
     TestResults = recordtype('TestResults', 'failed, attempted')
     print(TestResults(*doctest.testmod()))
